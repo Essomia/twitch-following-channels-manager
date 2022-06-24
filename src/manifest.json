@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Twitch Following Channels Manager",
+  "description": "A chrome extension to categorize the channels you follow on twitch.",
+  "version": "0.1.0",
+  "author": "Melissa Boutry",
+  "icons": {
+    "16": "./icons/twitch-love.png",
+    "32": "./icons/twitch-love.png",
+    "48": "./icons/twitch-love.png",
+    "128": "./icons/twitch-love.png"
+  }
+}
