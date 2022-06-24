@@ -1,0 +1,15 @@
+root = true
+
+[*]
+charset = utf-8                  # To control the character set.
+end_of_line = lf                 # To control how line breaks are represented.
+indent_size = 4                  # To define the number of columns used for each indentation.
+indent_style = space             # To define tab (hard tabs) or space (soft tabs).
+insert_final_newline = true      # To add a newline when saving.
+trim_trailing_whitespace = true  # To remove any whitespace characters preceding newline characters.
+
+[{*.yaml, .prettierrc}]
+indent_size = 2
+
+[{.editorconfig, *.md}]
+indent_size = false

@@ -1,0 +1,26 @@
+{
+  "name": "@essomia/twitch-following-channels-manager",
+  "version": "0.1.0",
+  "description": "A chrome extension to categorize the channels you follow on twitch.",
+  "homepage": "https://github.com/essomia/twitch-following-channels-manager#readme",
+  "author": "Melissa Boutry <essomia@users.noreply.github.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/essomia/twitch-following-channels-manager.git"
+  },
+  "bugs": {
+    "url": "https://github.com/essomia/twitch-following-channels-manager/issues"
+  },
+  "main": "./src/manifest.json",
+  "scripts": {
+    "lint": "npm run lint:px && npm run lint:js",
+    "lint:px": "prettier --write \"./**/*.{js,json}\"",
+    "lint:js": "gulp watch"
+  },
+  "devDependencies": {
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint": "^8.18.0",
+    "prettier": "^2.7.0"
+  }
+}

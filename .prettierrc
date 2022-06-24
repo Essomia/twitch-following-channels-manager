@@ -1,0 +1,33 @@
+{
+  "printWidth": 120,
+  "tabWidth": 4,
+  "useTabs": false,
+  "singleQuote": true,
+  "bracketSpacing": true,
+  "proseWrap": "preserve",
+  "semi": true,
+  "quoteProps": "as-needed",
+  "arrowParens": "avoid",
+  "trailingComma": "es5",
+  "jsxSingleQuote": true,
+  "jsxBracketSameLine": false,
+  "htmlWhitespaceSensitivity": "css",
+  "vueIndentScriptAndStyle": true,
+  "insertPragma": false,
+  "requirePragma": false,
+
+  "overrides": [
+    {
+      "files": ["*.yaml", ".prettierrc"],
+      "options": {
+        "tabWidth": 2
+      }
+    },
+    {
+      "files": [".editorconfig", "*.md"],
+      "options": {
+        "tabWidth": 0
+      }
+    }
+  ]
+}
