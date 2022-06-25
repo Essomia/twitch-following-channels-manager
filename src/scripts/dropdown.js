@@ -1,3 +1,5 @@
+var storage_name = "tfcm-ext-sources";
+
 var tplDropdown = `
 <div class="tfcm-root tfcm-dropdown">
     <select class="tfcm-dropdown-select" name="category">
@@ -18,10 +20,20 @@ function onChangeDropdown(value) {
   const card = this.closest(".channel-follow-listing--card");
   const link = card.querySelector(".tw-link");
 
-  console.log({
+  card.setAttribute("data-tfcm-category", this.value);
+
+  const savedData = JSON.parse(localStorage.getItem(storage_name)) || [];
+
+  datas = savedData.filter(
+    (item) => item.name !== link.getAttribute("aria-label")
+  );
+
+  datas.push({
     name: link.getAttribute("aria-label"),
     category: this.value,
   });
+
+  localStorage.setItem(storage_name, JSON.stringify(datas));
 }
 
 /**
