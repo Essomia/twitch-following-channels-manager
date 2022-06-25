@@ -46,3 +46,16 @@ document.querySelectorAll(".channel-follow-listing--card").forEach((card) => {
     .querySelector(`.tfcm-dropdown-select`)
     .addEventListener("change", onChangeDropdown);
 });
+
+const savedData = JSON.parse(localStorage.getItem(storage_name)) || [];
+
+savedData.forEach((data) => {
+  const { name, category } = data;
+
+  const link = document.querySelector(`[aria-label="${name}"]`);
+  const card = link.closest(".channel-follow-listing--card");
+  const dropdown = card.querySelector(`.tfcm-dropdown-select`);
+
+  card.setAttribute("data-tfcm-category", category);
+  dropdown.value = category;
+});
