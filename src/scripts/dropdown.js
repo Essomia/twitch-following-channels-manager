@@ -59,3 +59,22 @@ savedData.forEach((data) => {
   card.setAttribute("data-tfcm-category", category);
   dropdown.value = category;
 });
+
+/**
+ * Set tfcm category on new card added at scroll
+ */
+
+document
+  .querySelector(".tw-tower")
+  .addEventListener("DOMNodeInserted", function (event) {
+    const newCard = event.target;
+
+    if (!newCard.classList.contains("channel-follow-listing--card")) {
+      return false;
+    }
+
+    const link = newCard.querySelector(".tw-link");
+
+    console.log(link.getAttribute("aria-label"));
+    // TODO: add dropdown with default value if we have one
+  });
