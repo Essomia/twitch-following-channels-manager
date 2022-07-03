@@ -15,6 +15,17 @@ var tplDropdown = `
   </div>
 `;
 
+var tplFiltersClass = `.${module_prefix}-filters-select`;
+var tplFilters = `
+  <div class="${module_prefix}-root ${module_prefix}-filters">
+      <ul class="${module_prefix}-filters-select">
+          <li data-filter-value="artist">Artist</li>
+          <li data-filter-value="gamer">Gamer</li>
+          <li data-filter-value="other">Other</li>
+      </ul>
+  </div>
+`;
+
 /**
  * Get elements from subelement
  * @param {ObjectHTML} subelement
@@ -119,3 +130,26 @@ document
 
     insertDropdown([newCard]);
   });
+
+/**
+ * Filters on click
+ */
+function onFilterClick() {
+  // console.log("TODO: filter by", this);
+}
+
+/**
+ * Add filters list on top
+ * @param {[NodeList|ObjectHTML]} parents
+ */
+function insertFilters(parents) {
+  // parents.forEach((parent) => {
+  //   parent.insertAdjacentHTML("beforeend", tplFilters);
+  //   parent
+  //     .querySelector(tplFiltersClass)
+  //     .addEventListener("click", onFilterClick);
+  // });
+}
+
+// On load
+insertFilters(document.querySelectorAll(".tw-tabs"));
