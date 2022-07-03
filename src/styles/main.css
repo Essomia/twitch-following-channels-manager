@@ -1,0 +1,40 @@
+.tfcm-root {
+  font-size: var(--font-size-4) ;
+}
+
+.tfcm-dropdown {
+  position: absolute;
+  z-index: 100;
+  margin: 1em;
+}
+
+.tfcm-filters {
+  /**/
+}
+
+.tfcm-dropdown-select {
+  /**/
+}
+
+.tfcm-dropdown-select option {
+  /**/
+}
+
+.tfcm-filters-select {
+  display: flex ;
+  flex-grow: 1 ;
+  align-items: center ;
+  justify-content: flex-start;
+  flex-wrap: wrap ;
+}
+
+.tfcm-filters-select li {
+  flex-grow: 0 ;
+  align-items: center ;
+  justify-content: center ;
+  padding: 0 .5em;
+}
+
+.tfcm-card-hidden {
+  opacity: .1;
+}
