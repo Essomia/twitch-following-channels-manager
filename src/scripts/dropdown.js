@@ -1,80 +1,121 @@
-var storage_name = "tfcm-ext-sources";
+var module_prefix = "tfcm";
 
+var storageKey = `${module_prefix}-ext-sources`;
+var attrCategory = `data-${module_prefix}-category`;
+
+var tplDropdownClass = `.${module_prefix}-dropdown-select`;
 var tplDropdown = `
-<div class="tfcm-root tfcm-dropdown">
-    <select class="tfcm-dropdown-select" name="category">
-        <option value="">-- choose --</option>
-        <option value="artist">Artist</option>
-        <option value="gamer-qc">Gamer QC</option>
-        <option value="gamer-fr">Gamer FR</option>
-        <option value="other">Other</option>
-    </select>
-</div>
+  <div class="${module_prefix}-root ${module_prefix}-dropdown">
+      <select class="${module_prefix}-dropdown-select" name="category">
+          <option value="">-- choose --</option>
+          <option value="artist">Artist</option>
+          <option value="gamer">Gamer</option>
+          <option value="other">Other</option>
+      </select>
+  </div>
 `;
 
 /**
- * Set tfcm category on card at dropdown change
+ * Get elements from subelement
+ * @param {ObjectHTML} subelement
  */
+function getDOMElements(subelement) {
+  const card = subelement.closest(`.channel-follow-listing--card`);
+  const dropdown = card.querySelector(tplDropdownClass);
+  const link = card.querySelector(`.tw-link`);
+  const ariaName = link.getAttribute("aria-label");
 
-function onChangeDropdown(value) {
-  const card = this.closest(".channel-follow-listing--card");
-  const link = card.querySelector(".tw-link");
-
-  card.setAttribute("data-tfcm-category", this.value);
-
-  const savedData = JSON.parse(localStorage.getItem(storage_name)) || [];
-
-  datas = savedData.filter(
-    (item) => item.name !== link.getAttribute("aria-label")
-  );
-
-  datas.push({
-    name: link.getAttribute("aria-label"),
-    category: this.value,
-  });
-
-  localStorage.setItem(storage_name, JSON.stringify(datas));
+  return {
+    card,
+    dropdown,
+    link,
+    ariaName,
+  };
 }
 
 /**
- * Set tfcm category on card at load
+ * Save value when dropdown value change
  */
+function onDropdownChange() {
+  const { card, link, ariaName } = getDOMElements(this);
 
-document.querySelectorAll(".channel-follow-listing--card").forEach((card) => {
-  card.insertAdjacentHTML("afterbegin", tplDropdown);
-  card
-    .querySelector(`.tfcm-dropdown-select`)
-    .addEventListener("change", onChangeDropdown);
-});
+  // Set chosen value on card attributes
+  card.setAttribute(attrCategory, this.value);
 
-const savedData = JSON.parse(localStorage.getItem(storage_name)) || [];
+  // Get already saved datas
+  const savedData = JSON.parse(localStorage.getItem(storageKey)) || [];
 
-savedData.forEach((data) => {
-  const { name, category } = data;
+  // Clean datas to remove any old value
+  const datas = savedData.filter((item) => item.name !== ariaName);
 
-  const link = document.querySelector(`[aria-label="${name}"]`);
-  const card = link.closest(".channel-follow-listing--card");
-  const dropdown = card.querySelector(`.tfcm-dropdown-select`);
+  // Add new data with chosen value
+  datas.push({
+    name: ariaName,
+    category: this.value,
+  });
 
-  card.setAttribute("data-tfcm-category", category);
-  dropdown.value = category;
-});
+  // Save chosen value in storage
+  localStorage.setItem(storageKey, JSON.stringify(datas));
+}
 
 /**
- * Set tfcm category on new card added at scroll
+ * Be sure to display default value in dropdown from saved datas on initialization
+ * @param {[Node|ObjectHTML]} newCard
  */
+function initDropdownValue(newCard) {
+  const { card, dropdown, ariaName } = getDOMElements(newCard);
 
+  // Get already saved datas for current card
+  const savedData = JSON.parse(localStorage.getItem(storageKey)) || [];
+  const datas = savedData.find((item) => item.name === ariaName);
+
+  if (datas === undefined) {
+    return false;
+  }
+
+  // Set default value on card attributes
+  card.setAttribute(attrCategory, datas.category);
+
+  // Set default value on dropdown
+  dropdown.value = datas.category;
+}
+
+/**
+ * Add dropdown for each card and bind event
+ * @param {[NodeList|ObjectHTML]} cardList
+ */
+function insertDropdown(cardList) {
+  cardList.forEach((card) => {
+    // Check if card already have a dropdown
+    if (card.querySelector(tplDropdownClass) !== null) {
+      // Do nothing
+    } else {
+      card.insertAdjacentHTML("afterbegin", tplDropdown);
+
+      card
+        .querySelector(tplDropdownClass)
+        .addEventListener("change", onDropdownChange);
+
+      initDropdownValue(card);
+    }
+  });
+}
+
+// On load
+insertDropdown(document.querySelectorAll(".channel-follow-listing--card"));
+
+// On scroll
 document
   .querySelector(".tw-tower")
   .addEventListener("DOMNodeInserted", function (event) {
     const newCard = event.target;
 
-    if (!newCard.classList.contains("channel-follow-listing--card")) {
+    if (
+      !newCard.classList ||
+      !newCard.classList.contains("channel-follow-listing--card")
+    ) {
       return false;
     }
 
-    const link = newCard.querySelector(".tw-link");
-
-    console.log(link.getAttribute("aria-label"));
-    // TODO: add dropdown with default value if we have one
+    insertDropdown([newCard]);
   });
