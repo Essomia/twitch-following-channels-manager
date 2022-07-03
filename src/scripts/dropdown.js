@@ -2,6 +2,7 @@ var module_prefix = "tfcm";
 
 var storageKey = `${module_prefix}-ext-sources`;
 var attrCategory = `data-${module_prefix}-category`;
+var attrFilter = `data-${module_prefix}-filter`;
 
 var tplDropdownClass = `.${module_prefix}-dropdown-select`;
 var tplDropdown = `
@@ -15,13 +16,16 @@ var tplDropdown = `
   </div>
 `;
 
+var classCardToHide = `${module_prefix}-card-hidden`;
+
 var tplFiltersClass = `.${module_prefix}-filters-select`;
 var tplFilters = `
   <div class="${module_prefix}-root ${module_prefix}-filters">
       <ul class="${module_prefix}-filters-select">
-          <li data-filter-value="artist">Artist</li>
-          <li data-filter-value="gamer">Gamer</li>
-          <li data-filter-value="other">Other</li>
+          <li data-${module_prefix}-filter="">All</li>
+          <li data-${module_prefix}-filter="artist">Artist</li>
+          <li data-${module_prefix}-filter="gamer">Gamer</li>
+          <li data-${module_prefix}-filter="other">Other</li>
       </ul>
   </div>
 `;
@@ -135,7 +139,22 @@ document
  * Filters on click
  */
 function onFilterClick() {
-  // console.log("TODO: filter by", this);
+  // Get filter name we want
+  const filterName = this.getAttribute(attrFilter);
+
+  const cardList = document.querySelectorAll(`[${attrCategory}]`);
+
+  cardList.forEach((card) => {
+    // Remove class if already added
+    if (card.classList.contains(classCardToHide)) {
+      card.classList.toggle(classCardToHide);
+    }
+
+    // Add class if card has correct category name
+    if (card.dataset.tfcmCategory === filterName) {
+      card.classList.add(classCardToHide);
+    }
+  });
 }
 
 /**
@@ -143,12 +162,15 @@ function onFilterClick() {
  * @param {[NodeList|ObjectHTML]} parents
  */
 function insertFilters(parents) {
-  // parents.forEach((parent) => {
-  //   parent.insertAdjacentHTML("beforeend", tplFilters);
-  //   parent
-  //     .querySelector(tplFiltersClass)
-  //     .addEventListener("click", onFilterClick);
-  // });
+  parents.forEach((parent) => {
+    parent.insertAdjacentHTML("beforeend", tplFilters);
+    parent
+      .querySelector(tplFiltersClass)
+      .querySelectorAll("li")
+      .forEach((filter) => {
+        filter.addEventListener("click", onFilterClick);
+      });
+  });
 }
 
 // On load
